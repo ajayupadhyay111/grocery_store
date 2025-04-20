@@ -9,3 +9,12 @@ export interface AppContextType {
   showUserLogin:boolean;
   setShowUserLogin:(showUserLogin:boolean)=>void;
 }
+
+export interface Product {
+  name: string;
+  category: string;
+  price: number;
+  offerPrice: number;
+  rating: number;
+  image: string;
+}

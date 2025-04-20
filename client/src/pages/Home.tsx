@@ -1,6 +1,8 @@
 import BestSeller from "../components/BestSeller"
+import BottomBanner from "../components/BottomBanner"
 import Categories from "../components/Categories"
 import HeroComponent from "../components/HeroComponent"
+import NewsLetter from "../components/NewsLetter"
 
 const Home = () => {
   return (
@@ -8,6 +10,8 @@ const Home = () => {
         <HeroComponent/>
         <Categories/>
         <BestSeller/>
+        <BottomBanner/>
+        <NewsLetter/>
     </div>
   )
 }

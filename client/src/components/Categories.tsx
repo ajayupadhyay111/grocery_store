@@ -19,7 +19,7 @@ const Categories = () => {
               }}
             >
               <img
-                src={category.image}
+                src={category.image }
                 alt={category.path}
                 className="size-20 group-hover:scale-110  transition"
               />
