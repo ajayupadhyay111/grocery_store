@@ -217,7 +217,6 @@ export const dummyProducts = [
     createdAt: "2025-03-25T07:17:46.018Z",
     updatedAt: "2025-03-25T07:18:13.103Z",
     inStock: true,
-    rating:4
   },
   {
     _id: "gd47g34h",
@@ -235,7 +234,6 @@ export const dummyProducts = [
     createdAt: "2025-03-25T07:17:46.018Z",
     updatedAt: "2025-03-25T07:18:13.103Z",
     inStock: true,
-    rating:5
   },
   {
     _id: "gd48g45h",
@@ -252,7 +250,6 @@ export const dummyProducts = [
     createdAt: "2025-03-25T07:17:46.018Z",
     updatedAt: "2025-03-25T07:18:13.103Z",
     inStock: true,
-    rating:3
   },
   {
     _id: "gd49g56h",
@@ -269,7 +266,6 @@ export const dummyProducts = [
     createdAt: "2025-03-25T07:17:46.018Z",
     updatedAt: "2025-03-25T07:18:13.103Z",
     inStock: true,
-    rating:4
   },
   {
     _id: "gd50g67h",
@@ -286,7 +282,6 @@ export const dummyProducts = [
     createdAt: "2025-03-25T07:17:46.018Z",
     updatedAt: "2025-03-25T07:18:13.103Z",
     inStock: true,
-    rating:4
   },
 
   // Fruits

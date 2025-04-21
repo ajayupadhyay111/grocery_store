@@ -6,12 +6,12 @@ const Categories = () => {
   return (
     <div className="mt-7">
       <h1 className="text-3xl font-semibold mb-3">Categories</h1>
-      <div className="flex justify-between ">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-5 lg:grid-cols-7">
         {categories.map((category, idx) => {
           return (
             <div
               key={idx}
-              className="group w-30 py-3 gap-1 flex items-center flex-col justify-center rounded"
+              className="group min-w-32 py-3 gap-1 flex items-center flex-col justify-center rounded"
               style={{ backgroundColor: `${category.bgColor}` }}
               onClick={() => {
                 navigate(`/products/${category.path.toLowerCase()}`);

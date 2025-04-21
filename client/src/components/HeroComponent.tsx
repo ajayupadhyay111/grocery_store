@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 
 const HeroComponent = () => {
   return (
-    <div className="relative">
+    <div className="relative z-40">
       <img
         src={assets.main_banner_bg}
         alt="banner"

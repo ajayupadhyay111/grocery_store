@@ -24,7 +24,7 @@ const Footer = () => {
 
   return (
     <div className="mt-24 px-6 md:px-16 lg:px-24 xl:px-32 bg-green-100/70">
-      <div className="flex flex-col md:flex-row items-start justify-between gap-10 py-10 border-b border-gray-500/30 text-gray-500">
+      <div className="flex flex-col lg:flex-row items-start justify-between gap-10 py-10 border-b border-gray-500/30 text-gray-500">
         <div>
           <img
             className="w-34 md:w-40"
@@ -35,7 +35,7 @@ const Footer = () => {
             quaerat eveniet cumque accusamus atque qui error quo enim fugiat?
           </p>
         </div>
-        <div className="flex flex-wrap justify-between w-full md:w-[45%] gap-5">
+        <div className="flex flex-wrap justify-between w-full lg:w-[45%] gap-5">
           {linkSections.map((section, index) => (
             <div key={index}>
               <h3 className="font-semibold text-xl text-gray-900 md:mb-5 mb-2">
