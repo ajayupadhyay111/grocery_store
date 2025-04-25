@@ -1,13 +1,16 @@
-import React from "react";
 import { Product } from "../types";
 import { useAppContext } from "../context/appContext";
 
-
-const ProductCard = ({product}:{product:Product}) => {
-  const [count, setCount] = React.useState(0);
-const {navigate} = useAppContext();
+const ProductCard = ({ product }: { product: Product }) => {
+  const { navigate, cartItems, addProductToCart, removeCartProduct } =
+    useAppContext();
   return (
-    <div onClick={()=>navigate(`/product/${product.category.toLowerCase()}/${product._id}`)} className="border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white min-w-40 max-w-56 w-full">
+    <div
+      onClick={() =>
+        navigate(`/product/${product.category.toLowerCase()}/${product._id}`)
+      }
+      className="border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white min-w-40 max-w-56 w-full"
+    >
       <div className="group cursor-pointer flex items-center justify-center px-2">
         <img
           className="group-hover:scale-105 transition max-w-26 md:max-w-36"
@@ -63,11 +66,11 @@ const {navigate} = useAppContext();
               ${product.price}
             </span>
           </p>
-          <div className="text-primary">
-            {count === 0 ? (
+          <div className="text-primary" onClick={(e) => e.stopPropagation()}>
+            {!cartItems[product._id] ? (
               <button
                 className="flex items-center justify-center gap-1 bg-green-100 border border-primary md:w-[80px] w-[64px] h-[34px] rounded text-primary-dull font-medium"
-                onClick={() => setCount(1)}
+                onClick={() => addProductToCart(product._id)}
               >
                 <svg
                   width="14"
@@ -88,14 +91,16 @@ const {navigate} = useAppContext();
             ) : (
               <div className="flex items-center justify-center gap-2 md:w-20 w-16 h-[34px] bg-indigo-500/25 rounded select-none">
                 <button
-                  onClick={() => setCount((prev) => Math.max(prev - 1, 0))}
+                  onClick={() => removeCartProduct(product._id)}
                   className="cursor-pointer text-md px-2 h-full"
                 >
                   -
                 </button>
-                <span className="w-5 text-center">{count}</span>
+                <span className="w-5 text-center">
+                  {cartItems[product._id]}
+                </span>
                 <button
-                  onClick={() => setCount((prev) => prev + 1)}
+                  onClick={() => addProductToCart(product._id)}
                   className="cursor-pointer text-md px-2 h-full"
                 >
                   +

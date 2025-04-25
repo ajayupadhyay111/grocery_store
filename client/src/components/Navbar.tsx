@@ -5,18 +5,26 @@ import { useAppContext } from "../context/appContext";
 
 const Navbar = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const { user, setUser, navigate, setShowUserLogin,searchQuery,setSearchQuery } = useAppContext();
+  const {
+    user,
+    setUser,
+    navigate,
+    setShowUserLogin,
+    searchQuery,
+    setSearchQuery,
+    getCartProductsCount,
+  } = useAppContext();
 
   const logout = () => {
     setUser(null);
     navigate("/");
   };
 
-  useEffect(()=>{
-    if(searchQuery && searchQuery.length > 0){
-      navigate("/products")
+  useEffect(() => {
+    if (searchQuery && searchQuery.length > 0) {
+      navigate("/products");
     }
-  },[searchQuery])
+  }, [searchQuery]);
 
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
@@ -35,13 +43,13 @@ const Navbar = () => {
             className="py-1.5 w-full text-start bg-transparent outline-none placeholder-gray-500"
             type="text"
             placeholder="Search products"
-            onChange={(e)=>setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <img src={assets.search_icon} alt="search" className="size-4" />
         </div>
 
         <div
-          onClick={() => navigate("/carts")}
+          onClick={() => navigate("/cart")}
           className="relative cursor-pointer"
         >
           <img
@@ -50,7 +58,7 @@ const Navbar = () => {
             className="w-6 opacity-80"
           />
           <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">
-            3
+            {getCartProductsCount()}
           </button>
         </div>
         {!user ? (
@@ -81,14 +89,29 @@ const Navbar = () => {
         )}
       </div>
 
-      <button
-        onClick={() => (open ? setOpen(false) : setOpen(true))}
-        aria-label="Menu"
-        className="sm:hidden"
-      >
-        {/* Menu Icon SVG */}
-        <img src={assets.menu_icon} alt="menu" />
-      </button>
+      <div className="sm:hidden flex gap-5 items-center">
+        <div
+          onClick={() => navigate("/cart")}
+          className="relative cursor-pointer"
+        >
+          <img
+            src={assets.nav_cart_icon}
+            alt="cart"
+            className="w-6 opacity-80"
+          />
+          <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">
+            {getCartProductsCount()}
+          </button>
+        </div>
+        <button
+          onClick={() => (open ? setOpen(false) : setOpen(true))}
+          aria-label="Menu"
+          className="sm:hidden"
+        >
+          {/* Menu Icon SVG */}
+          <img src={assets.menu_icon} alt="menu" />
+        </button>
+      </div>
 
       {/* Mobile Menu */}
       {open && (
