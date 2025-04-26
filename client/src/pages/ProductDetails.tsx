@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAppContext } from "../context/appContext";
 import { Product } from "../types";
-import ProductCard from "./ProductCard";
+import ProductCard from "../components/ProductCard";
 
 const ProductDetails = () => {
   const {navigate, products, cartItems, addProductToCart, removeCartProduct } =

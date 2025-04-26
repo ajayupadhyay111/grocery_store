@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/appContext";
 import { Product } from "../types";
+import { assets, dummyAddress } from "../assets/assets";
 
 const Cart = () => {
   const [showAddress, setShowAddress] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(dummyAddress[0]);
+  const [paymentOption, setPaymentOption] = useState("COD");
+  const [addresses, setAddresses] = useState(dummyAddress);
   const [cartProducts, setCartProducts] = useState<Product[]>([]);
-  const [quantity, setQuantity] = useState<number>(0);
   const {
     products,
     navigate,
@@ -13,6 +16,7 @@ const Cart = () => {
     cartItems,
     getCartProductsTotalAmount,
     updateCartProduct,
+    removeCartProduct,
   } = useAppContext();
   useEffect(() => {
     const cartProd: Product[] = [];
@@ -74,9 +78,9 @@ const Cart = () => {
                     <p>Qty:</p>
                     <select
                       className="outline-none"
-                      value={quantity}
+                      value={cartItems[product._id]}
                       onChange={(e) => {
-                        setQuantity(Number(e.target.value));
+                        updateCartProduct(product._id, Number(e.target.value));
                       }}
                     >
                       {Array(
@@ -96,22 +100,15 @@ const Cart = () => {
             <p className="text-center">
               ${product.offerPrice * cartItems[product._id]}
             </p>
-            <button className="cursor-pointer mx-auto">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="m12.5 7.5-5 5m0-5 5 5m5.833-2.5a8.333 8.333 0 1 1-16.667 0 8.333 8.333 0 0 1 16.667 0"
-                  stroke="#FF532E"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+            <button
+              onClick={() => removeCartProduct(product._id)}
+              className="cursor-pointer mx-auto"
+            >
+              <img
+                src={assets.remove_icon}
+                alt="trash"
+                className="inline-block size-6"
+              />
             </button>
           </div>
         ))}
@@ -146,7 +143,11 @@ const Cart = () => {
         <div className="mb-6">
           <p className="text-sm font-medium uppercase">Delivery Address</p>
           <div className="relative flex justify-between items-start mt-2">
-            <p className="text-gray-500">No address found</p>
+            <p className="text-gray-500">
+              {selectedAddress
+                ? `${selectedAddress.street},${selectedAddress.city},${selectedAddress.state},${selectedAddress.country}`
+                : "No address found"}
+            </p>
             <button
               onClick={() => setShowAddress(!showAddress)}
               className="text-primary hover:underline cursor-pointer"
@@ -155,14 +156,20 @@ const Cart = () => {
             </button>
             {showAddress && (
               <div className="absolute top-12 py-1 bg-white border border-gray-300 text-sm w-full">
+                {addresses.map((address) => (
+                  <p
+                    onClick={() => {
+                      setSelectedAddress(address);
+                      setShowAddress(false);
+                    }}
+                    className="text-gray-500 p-2 hover:bg-gray-100"
+                  >
+                    {address.street},{address.state},{address.city},
+                    {address.country}
+                  </p>
+                ))}
                 <p
-                  onClick={() => setShowAddress(false)}
-                  className="text-gray-500 p-2 hover:bg-gray-100"
-                >
-                  New York, USA
-                </p>
-                <p
-                  onClick={() => setShowAddress(false)}
+                  onClick={() => navigate("/add-address")}
                   className="text-primary text-center cursor-pointer p-2 hover:bg-primary-dull/10"
                 >
                   Add address
@@ -173,7 +180,10 @@ const Cart = () => {
 
           <p className="text-sm font-medium uppercase mt-6">Payment Method</p>
 
-          <select className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none">
+          <select
+            onChange={(e) => setPaymentOption(e.target.value)}
+            className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none"
+          >
             <option value="COD">Cash On Delivery</option>
             <option value="Online">Online Payment</option>
           </select>
@@ -201,7 +211,7 @@ const Cart = () => {
         </div>
 
         <button className="w-full py-3 mt-6 cursor-pointer bg-primary text-white font-medium hover:bg-primary-dull transition">
-          Place Order
+          {paymentOption === "COD" ? "Place Order" : "Proceed to checkout"}
         </button>
       </div>
     </div>

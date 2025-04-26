@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/appContext";
 import { Product } from "../types";
-import ProductCard from "./ProductCard";
+import ProductCard from "../components/ProductCard";
 
 const AllProducts = () => {
   const { products, searchQuery } = useAppContext();

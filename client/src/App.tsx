@@ -4,11 +4,13 @@ import Home from "./pages/Home";
 import Footer from "./components/Footer";
 import { useAppContext } from "./context/appContext";
 import Login from "./components/Login";
-import AllProducts from "./components/AllProducts";
-import ProductCategory from "./components/ProductCategory";
-import ProductDetails from "./components/ProductDetails";
+import AllProducts from "./pages/AllProducts";
+import ProductCategory from "./pages/ProductCategory";
+import ProductDetails from "./pages/ProductDetails";
 import { Toaster } from "react-hot-toast";
-import Cart from "./components/Cart";
+import Cart from "./pages/Cart";
+import AddAddress from "./pages/AddAddress";
+import Orders from "./pages/Orders";
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
@@ -26,6 +28,8 @@ const App = () => {
           <Route path="/products/:category" element={<ProductCategory />} />
           <Route path="/product/:category/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/my-orders" element={<Orders />} />
+          <Route path="/add-address" element={<AddAddress />} />
         </Routes>
       </div>
       <Footer />

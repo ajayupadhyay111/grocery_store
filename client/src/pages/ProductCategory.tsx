@@ -1,15 +1,15 @@
     import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAppContext } from "../context/appContext";
 import { Product } from "../types";
-import ProductCard from "./ProductCard";
+import ProductCard from "../components/ProductCard";
+import { useAppContext } from "../context/appContext";
 const ProductCategory = () => {
   const { category } = useParams();
   const { products } = useAppContext();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   useEffect(() => {
     setFilteredProducts(
-      products.filter((product) =>
+      (products ?? []).filter((product) =>
         product.category.toLowerCase().includes(category || "")
       )
     );
