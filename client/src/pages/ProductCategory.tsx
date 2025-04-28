@@ -20,11 +20,14 @@ const ProductCategory = () => {
         <p className="text-2xl font-medium uppercase">{category}</p>
         <div className="w-16 h-0.5 bg-primary rounded-full"></div>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-6">
+      {
+        filteredProducts.length > 0 ? 
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-6">
         {filteredProducts.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}
       </div>
+     :<p className="font-bold text-center text-primary mt-24">No product found in this category</p> }
     </div>
   );
 };

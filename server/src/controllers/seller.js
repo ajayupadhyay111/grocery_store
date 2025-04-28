@@ -1,6 +1,9 @@
+import jwt from "jsonwebtoken";
+
 export const sellerLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(email, password);
     if (
       email === process.env.SELLER_EMAIL &&
       password === process.env.SELLER_PASSWORD
@@ -19,6 +22,9 @@ export const sellerLogin = async (req, res) => {
         message: "Login successful",
         user: { name: "Seller", email: email },
       });
+    }
+    else {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
   } catch (error) {
     console.error(error.message);
@@ -49,4 +55,4 @@ export const sellerLogout = async (req, res) => {
     console.error(error.message);
     res.status(500).json({ success: false, message: error.message });
   }
-};  
+};

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useAppContext } from "../context/appContext";
+import API from "../utils/axios";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -15,9 +17,20 @@ const Navbar = () => {
     getCartProductsCount,
   } = useAppContext();
 
-  const logout = () => {
+  const logout = async() => {
+try {
+  const {data} = await API.get("/user/logout")
+  if(data.success){
+    toast.success(data.message)
     setUser(null);
     navigate("/");
+  }else{
+    toast.error(data.message)
+  }
+} catch (error:any) {
+    toast.error(error? error.response?.data.message :"Internal server error")
+  
+}
   };
 
   useEffect(() => {

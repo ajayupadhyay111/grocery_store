@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/appContext";
-import { Product } from "../types";
-import { assets, dummyAddress } from "../assets/assets";
+import { AddressForm, Product } from "../types";
+import { assets } from "../assets/assets";
+import API from "../utils/axios";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 const Cart = () => {
   const [showAddress, setShowAddress] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState(dummyAddress[0]);
+  const [selectedAddress, setSelectedAddress] = useState<AddressForm>();
   const [paymentOption, setPaymentOption] = useState("COD");
-  const [addresses, setAddresses] = useState(dummyAddress);
+  const [addresses, setAddresses] = useState<AddressForm[]>([]);
   const [cartProducts, setCartProducts] = useState<Product[]>([]);
   const {
+    user,
     products,
     navigate,
     getCartProductsCount,
@@ -17,6 +21,7 @@ const Cart = () => {
     getCartProductsTotalAmount,
     updateCartProduct,
     removeCartProduct,
+    setCartItems,
   } = useAppContext();
   useEffect(() => {
     const cartProd: Product[] = [];
@@ -29,11 +34,71 @@ const Cart = () => {
     }
     console.log(cartProd);
     setCartProducts(cartProd);
+    fetchAddress();
   }, [cartItems, products, updateCartProduct]);
 
   const calculateTax = () => {
     return (getCartProductsTotalAmount() * 2) / 100;
   };
+
+  const fetchAddress = async () => {
+    try {
+      const { data } = await API.get("/address/getAddress");
+      if (!data.success) {
+        toast.success(data.message);
+      }
+      setAddresses(data.address);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.message || error.response.data.message);
+    }
+  };
+
+  console.log(user);
+  const placeOrder = async () => {
+    try {
+      if (!user) {
+        return toast.error("Please login to place order");
+      }
+
+      if (!selectedAddress) {
+        return toast.error("Please select a delivery address");
+      }
+
+      if (!cartItems || Object.keys(cartItems).length === 0) {
+        return toast.error("Your cart is empty");
+      }
+
+      const orderItems = Object.keys(cartItems).map(productId => ({
+        product: productId,
+        quantity: cartItems[productId]
+      }));
+
+      if (paymentOption === "COD") {
+        const { data } = await API.post("/order/cod", {
+          items: orderItems,
+          address: selectedAddress._id,
+          });
+
+        if (data.success) {
+          toast.success(data.message);
+          setCartItems({}); // Clear cart
+          navigate("/my-orders");
+        } else {
+          toast.error(data.message);
+        }
+      } else if (paymentOption === "Online") {
+        toast.error("Online payment not implemented yet");
+      }
+    } catch (error: any) {
+      console.error("Order placement error:", error);
+      toast.error(
+        error.response?.data?.message || 
+        error.message || 
+        "Failed to place order"
+      );
+    }
+};
   return (
     <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 mx-auto">
       <div className="flex-1 max-w-4xl">
@@ -98,7 +163,7 @@ const Cart = () => {
               </div>
             </div>
             <p className="text-center">
-              ${product.offerPrice * cartItems[product._id]}
+              ₹{product.offerPrice * cartItems[product._id]}
             </p>
             <button
               onClick={() => removeCartProduct(product._id)}
@@ -156,18 +221,19 @@ const Cart = () => {
             </button>
             {showAddress && (
               <div className="absolute top-12 py-1 bg-white border border-gray-300 text-sm w-full">
-                {addresses.map((address) => (
-                  <p
-                    onClick={() => {
-                      setSelectedAddress(address);
-                      setShowAddress(false);
-                    }}
-                    className="text-gray-500 p-2 hover:bg-gray-100"
-                  >
-                    {address.street},{address.state},{address.city},
-                    {address.country}
-                  </p>
-                ))}
+                {addresses &&
+                  addresses.map((address) => (
+                    <p
+                      onClick={() => {
+                        setSelectedAddress(address);
+                        setShowAddress(false);
+                      }}
+                      className="text-gray-500 p-2 hover:bg-gray-100"
+                    >
+                      {address.street},{address.state},{address.city},
+                      {address.country}
+                    </p>
+                  ))}
                 <p
                   onClick={() => navigate("/add-address")}
                   className="text-primary text-center cursor-pointer p-2 hover:bg-primary-dull/10"
@@ -194,7 +260,7 @@ const Cart = () => {
         <div className="text-gray-500 mt-4 space-y-2">
           <p className="flex justify-between">
             <span>Price</span>
-            <span>${getCartProductsTotalAmount()}</span>
+            <span>₹{getCartProductsTotalAmount()}</span>
           </p>
           <p className="flex justify-between">
             <span>Shipping Fee</span>
@@ -202,15 +268,18 @@ const Cart = () => {
           </p>
           <p className="flex justify-between">
             <span>Tax (2%)</span>
-            <span>${calculateTax()}</span>
+            <span>₹{calculateTax()}</span>
           </p>
           <p className="flex justify-between text-lg font-medium mt-3">
             <span>Total Amount:</span>
-            <span>${getCartProductsTotalAmount() + calculateTax()}</span>
+            <span>₹{getCartProductsTotalAmount() + calculateTax()}</span>
           </p>
         </div>
 
-        <button className="w-full py-3 mt-6 cursor-pointer bg-primary text-white font-medium hover:bg-primary-dull transition">
+        <button
+          onClick={placeOrder}
+          className="w-full py-3 mt-6 cursor-pointer bg-primary text-white font-medium hover:bg-primary-dull transition"
+        >
           {paymentOption === "COD" ? "Place Order" : "Proceed to checkout"}
         </button>
       </div>

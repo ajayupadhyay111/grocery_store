@@ -2,7 +2,7 @@ import { Product } from "../types";
 import { useAppContext } from "../context/appContext";
 
 const ProductCard = ({ product }: { product: Product }) => {
-  const { navigate, cartItems, addProductToCart, removeCartProduct } =
+  const {user, navigate, cartItems, addProductToCart, removeCartProduct } =
     useAppContext();
   return (
     <div
@@ -61,9 +61,9 @@ const ProductCard = ({ product }: { product: Product }) => {
         </div>
         <div className="flex items-end justify-between mt-3">
           <p className="md:text-xl text-base font-medium text-primary">
-            ${product.offerPrice}{" "}
+          ₹{product.offerPrice}{" "}
             <span className="text-gray-500/60 md:text-sm text-xs line-through">
-              ${product.price}
+            ₹{product.price}
             </span>
           </p>
           <div className="text-primary" onClick={(e) => e.stopPropagation()}>

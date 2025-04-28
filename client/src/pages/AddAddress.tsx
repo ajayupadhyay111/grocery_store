@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import { AddressForm } from "../types";
-
+import API from "../utils/axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
+import { useAppContext } from "../context/appContext";
 
 const AddAddress = () => {
   const [formData, setFormData] = useState<AddressForm>({
@@ -11,10 +15,12 @@ const AddAddress = () => {
     street: "",
     city: "",
     state: "",
-    zipcode: "",
+    zipCode: 123456,
     country: "",
     phone: "",
   });
+
+  const {navigate,user} = useAppContext();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -24,11 +30,28 @@ const AddAddress = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
+    try {
+      const { data } = await API.post("/address/add-address", {
+        address: formData,
+      });
+      if (data.success) {
+        toast.success(data.message);
+        navigate("/cart");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data.message || "Internal server error");
+    }
   };
 
+  useEffect(()=>{
+    if(!user){
+      navigate("/cart")
+    }
+  },[])
   return (
     <div className="mt-16 p-6">
       <h1 className="text-2xl md:text-3xl text-gray-500">

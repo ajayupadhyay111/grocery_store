@@ -39,8 +39,10 @@ export const register = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "User registered successfully",
-      user: newUser.name,
-      email: newUser.email,
+      user: {
+        name: newUser.name,
+        email: newUser.email,
+      }
     });
   } catch (error) {
     console.error(error.message);
@@ -88,7 +90,7 @@ export const login = async (req, res) => {
 
 export const IsAuth = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const userId = req.userId;
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }

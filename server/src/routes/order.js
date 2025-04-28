@@ -4,11 +4,13 @@ import {
   getUserOrders,
   placeOrderCOP,
 } from "../controllers/order.js";
+import { authCheck } from "../middleware/authcheck.js";
+import { sellerCheck } from "../middleware/authSeller.js";
 
 const router = express.Router();
 
-router.post("/cod", placeOrderCOP);
-router.get("/user", getUserOrders);
-router.get("/seller", getAllOrders);
+router.post("/cod", authCheck ,placeOrderCOP);
+router.get("/user", authCheck, getUserOrders);
+router.get("/seller",sellerCheck, getAllOrders);
 
 export default router;

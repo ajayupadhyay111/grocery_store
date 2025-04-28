@@ -7,8 +7,9 @@ export const authCheck = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
     if (decoded.id) {
-      req.body.userId = decoded.id;
+      req.userId = decoded.id;
     } else {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }

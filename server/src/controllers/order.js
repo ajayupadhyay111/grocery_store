@@ -3,7 +3,8 @@ import Product from "../models/product.js";
 
 export const placeOrderCOP = async (req, res) => {
   try {
-    const { userId, items, address } = req.body;
+    const userId = req.userId;
+    const { items, address } = req.body;
     if (!address || items.length === 0) {
       return res
         .status(400)
@@ -38,7 +39,7 @@ export const placeOrderCOP = async (req, res) => {
 
 export const getUserOrders = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const userId = req.userId;
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }
@@ -62,18 +63,17 @@ export const getUserOrders = async (req, res) => {
 
 export const getAllOrders = async (req, res) => {
   try {
-
     const orders = await Order.find({
-      userId,
       $or: [{ paymentType: "COD" }, { isPaid: true }],
-    }).populate("items.product address").sort({ createdAt: -1 });
+    })
+      .populate("items.product address")
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
       orders,
     });
-
-} catch (error) {
+  } catch (error) {
     console.error(error.message);
     res.status(500).json({ success: false, message: error.message });
   }

@@ -36,13 +36,14 @@ export interface Product {
 }
 
 export interface AddressForm {
+  _id:string;
   firstName: string;
   lastName: string;
   email: string;
   street: string;
   city: string;
   state: string;
-  zipcode: string;
+  zipCode: number;
   country: string;
   phone: string;
 }

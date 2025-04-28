@@ -2,7 +2,8 @@ import User from "../models/user.js";
 
 export const updateCart = async (req, res) => {
   try {
-    const { userId, cartItems } = req.body;
+    const userId = req.userId;
+    const { cartItems } = req.body;
     if (!cartItems || cartItems.length === 0) {
       return res.status(400).json({ message: "Cart items are required" });
     }

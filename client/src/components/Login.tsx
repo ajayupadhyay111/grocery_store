@@ -2,6 +2,8 @@ import React from "react";
 import { useAppContext } from "../context/appContext";
 import { GoEyeClosed } from "react-icons/go";
 import { BsEye } from "react-icons/bs";
+import API from "../utils/axios";
+import toast from "react-hot-toast";
 const Login = () => {
   const [state, setState] = React.useState("login");
   const [name, setName] = React.useState("");
@@ -9,7 +11,7 @@ const Login = () => {
   const [password, setPassword] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [hidePassword, setHidePassword] = React.useState(false);
-  const { setShowUserLogin } = useAppContext();
+  const { setShowUserLogin, setUser, navigate } = useAppContext();
 
   function validateEmail(email: string): boolean {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,7 +23,7 @@ const Login = () => {
     return regex.test(password);
   }
 
-  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!validateEmail(email)) {
       return setMessage("Write the valid email");
@@ -32,12 +34,27 @@ const Login = () => {
       );
       return;
     }
-    console.log("Email ", email);
-    console.log("Password ", password);
-    setShowUserLogin(false);
+    try {
+      const response = await API.post("/user/login", {
+        email,
+        password,
+      });
+      if (response.data.success) {
+        toast.success(response.data.message);
+        navigate("/");
+        setUser(response.data.user);
+        setShowUserLogin(false);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error: any) {
+      toast.error(
+        error?.response ? error.response.data.message : "Internal server error"
+      );
+    }
   };
 
-  const handleSignUp = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!validateEmail(email)) {
       return setMessage("Write the valid email");
@@ -48,10 +65,25 @@ const Login = () => {
       );
       return;
     }
-    console.log("Name ", name);
-    console.log("Email ", email);
-    console.log("Password ", password);
-    setShowUserLogin(false);
+    try {
+      const response = await API.post("/user/register", {
+        name,
+        email,
+        password,
+      });
+      if (response.data.success) {
+        toast.success(response.data.message);
+        navigate("/");
+        setUser(response.data.user);
+        setShowUserLogin(false);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Internal server error"
+      );
+    }
   };
 
   return (

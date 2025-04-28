@@ -11,12 +11,17 @@ import { Toaster } from "react-hot-toast";
 import Cart from "./pages/Cart";
 import AddAddress from "./pages/AddAddress";
 import Orders from "./pages/Orders";
+import SellerLogin from "./components/seller/SellerLogin";
+import SellerLayout from "./pages/seller/SellerLayout";
+import ProductList from "./pages/seller/ProductList";
+import AddProduct from "./pages/seller/AddProduct";
+import SellerOrders from "./pages/seller/Orders";
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
-  const { showUserLogin } = useAppContext();
+  const { showUserLogin, isSeller } = useAppContext();
   return (
-    <div>
+    <div className="text-default min-h-screen text-gray-700 bg-white">
       {isSellerPath ? null : <Navbar />}
       {showUserLogin ? <Login /> : null}
       <div
@@ -30,10 +35,18 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/my-orders" element={<Orders />} />
           <Route path="/add-address" element={<AddAddress />} />
+          <Route
+            path="/seller"
+            element={isSeller ? <SellerLayout/> : <SellerLogin />}
+          >
+            <Route index element={isSeller ? <AddProduct/>:null}/>
+            <Route path="product-list" element={isSeller ? <ProductList/>:null}/>
+            <Route path="orders" element={isSeller ? <SellerOrders/>:null}/>
+          </Route>
         </Routes>
       </div>
       <Footer />
-      <Toaster/>
+      <Toaster />
     </div>
   );
 };
