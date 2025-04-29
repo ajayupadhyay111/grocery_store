@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { assets, dummyOrders } from "../../assets/assets";
+import { useEffect, useState } from "react";
+import { assets } from "../../assets/assets";
 import { Order } from "../../types";
 import API from "../../utils/axios";
 import toast from "react-hot-toast";

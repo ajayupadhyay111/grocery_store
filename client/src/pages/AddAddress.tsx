@@ -3,8 +3,6 @@ import { assets } from "../assets/assets";
 import { AddressForm } from "../types";
 import API from "../utils/axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import { AxiosError } from "axios";
 import { useAppContext } from "../context/appContext";
 
 const AddAddress = () => {

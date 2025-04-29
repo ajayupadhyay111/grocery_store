@@ -4,7 +4,6 @@ import { AddressForm, Product } from "../types";
 import { assets } from "../assets/assets";
 import API from "../utils/axios";
 import toast from "react-hot-toast";
-import { AxiosError } from "axios";
 
 const Cart = () => {
   const [showAddress, setShowAddress] = useState(false);
