@@ -54,7 +54,6 @@ const Cart = () => {
     }
   };
 
-  console.log(user);
   const placeOrder = async () => {
     try {
       if (!user) {
@@ -69,16 +68,16 @@ const Cart = () => {
         return toast.error("Your cart is empty");
       }
 
-      const orderItems = Object.keys(cartItems).map(productId => ({
+      const orderItems = Object.keys(cartItems).map((productId) => ({
         product: productId,
-        quantity: cartItems[productId]
+        quantity: cartItems[productId],
       }));
-
+      console.log(orderItems)
       if (paymentOption === "COD") {
         const { data } = await API.post("/order/cod", {
           items: orderItems,
           address: selectedAddress._id,
-          });
+        });
 
         if (data.success) {
           toast.success(data.message);
@@ -88,17 +87,26 @@ const Cart = () => {
           toast.error(data.message);
         }
       } else if (paymentOption === "Online") {
-        toast.error("Online payment not implemented yet");
+        const { data } = await API.post("/order/stripe", {
+          items: orderItems,
+          address: selectedAddress._id,
+        });
+
+        if (data.success) {
+          window.location.replace(data.url)
+        } else {
+          toast.error(data.message);
+        }
       }
     } catch (error: any) {
       console.error("Order placement error:", error);
       toast.error(
-        error.response?.data?.message || 
-        error.message || 
-        "Failed to place order"
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to place order"
       );
     }
-};
+  };
   return (
     <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 mx-auto">
       <div className="flex-1 max-w-4xl">

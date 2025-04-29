@@ -9,12 +9,15 @@ import productRoutes from "./routes/product.js";
 import cartRoutes from "./routes/cart.js";
 import addressRoutes from "./routes/address.js";
 import orderRoutes from "./routes/order.js";
+import { stripeWebhook } from "./controllers/order.js";
 
 dotenv.config();
 
 const app = express();
 
 connectDB();
+
+app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhook);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -26,7 +29,7 @@ app.use(
 );
 
 app.get("/", (req, res) => res.send("Hello, World!"));
-app.use("/api/user",userRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/seller", sellerRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/cart", cartRoutes);
