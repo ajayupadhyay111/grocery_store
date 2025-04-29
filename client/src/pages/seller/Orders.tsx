@@ -59,7 +59,7 @@ const SellerOrders = () => {
                 {order.address.street}, {order.address.city},{" "}
               </p>
               <p>
-                {order.address.state},{order.address.zipcode},{" "}
+                {order.address.state},{order.address.zipCode},{" "}
                 {order.address.country}
               </p>
               <p></p>
