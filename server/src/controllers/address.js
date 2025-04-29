@@ -4,7 +4,6 @@ export const addAddress = async (req, res) => {
   try {
     const userId = req.userId;
     const { address } = req.body;
-    console.log(address)
     if (!address) {
       return res.status(400).json({ message: "Address is required" });
     }
