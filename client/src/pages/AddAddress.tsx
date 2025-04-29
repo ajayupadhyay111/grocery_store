@@ -124,9 +124,9 @@ const AddAddress = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
-              name="zipcode"
+              name="zipCode"
               placeholder="ZIP Code"
-              value={formData.zipcode}
+              value={formData.zipCode}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required

@@ -2,7 +2,7 @@ import { Product } from "../types";
 import { useAppContext } from "../context/appContext";
 
 const ProductCard = ({ product }: { product: Product }) => {
-  const {user, navigate, cartItems, addProductToCart, removeCartProduct } =
+  const {navigate, cartItems, addProductToCart, removeCartProduct } =
     useAppContext();
   return (
     <div

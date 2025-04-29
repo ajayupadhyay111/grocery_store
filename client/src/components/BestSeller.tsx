@@ -1,4 +1,4 @@
-import { dummyProducts } from "../assets/assets";
+
 import { useAppContext } from "../context/appContext";
 import ProductCard from "./ProductCard";
 
